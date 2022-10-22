@@ -1,2 +1,10 @@
+.terraform.lock.hcl
+.terraform/
+
+terraform.tfstate*
+terraform.tfvars
+
+env/
 __pycache__/
+flask_session/
 env/
