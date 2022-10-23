@@ -15,23 +15,49 @@ module "networking" {
 
 }
 
-/* module "database" {
+module "database" {
   source                 = "./Database"
-  db_storage             = 10
-  db_engine_version      = "8.0.28"
+  db_storage             = 20
+  db_engine_version      = "12.10"
   db_instance_class      = "db.t2.micro"
   dbname                 = var.dbname
   dbuser                 = var.dbuser
-  dbpassword             = var.dbpassword
+  dbpass             = var.dbpass
   db_identifier          = "mtc-db"
   skip_final_snapshot    = true
   db_subnet_group_name   = module.networking.db_subnet_group_name[0]
   vpc_security_group_ids = module.networking.db_security_group
-} */
+}
 
 
 module "loadbalancing" {
-  source = "./loadbalancing"
-  public_sg = ""
-  public_subnets = ""
+  source                 = "./loadbalancing"
+  public_sg              = module.networking.public_sg
+  public_subnets         = module.networking.public_subnets
+  vpc_id                 = module.networking.vpc_id
+  tg_port                = 80
+  tg_protocol            = "HTTP"
+  lb_healthy_threshold   = 2
+  lb_unhealthy_threshold = 2
+  lb_timeout             = 3
+  lb_interval            = 30
+  listener_port          = 80
+  listener_protocol      = "HTTP"
+}
+
+
+module "compute" {
+  source          = "./compute"
+  instance_count  = 1
+  instance_type   = "t3.micro"
+  vol_size        = 10
+  public_sg       = module.networking.public_sg
+  public_subnets  = module.networking.public_subnets
+  key_name        = "mtckey"
+  public_key_path = "~/.ssh/mtckey.pub"
+  user_data_path  = "${path.root}/userdata.tpl"
+  dbname          = var.dbname
+  dbuser          = var.dbuser
+  dbpass         = var.dbpass
+  db_endpoint     = module.database.db_endpoint
 }

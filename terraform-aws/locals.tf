@@ -20,6 +20,12 @@ locals {
           protocol    = "tcp"
           cidr_blocks = ["0.0.0.0/0"]
         }
+        http = {
+          from = 8000
+          to = 8000
+          protocol = "tcp"
+          cidr_blocks = ["0.0.0.0/0"]
+        }
       }
     }
     rds = {
@@ -27,8 +33,8 @@ locals {
       description = "rds_access"
       ingress = {
         mysql = {
-          from        = 3306
-          to          = 3306
+          from        = 5432
+          to          = 5432
           protocol    = "tcp"
           cidr_blocks = [local.vpc_cidr]
         }

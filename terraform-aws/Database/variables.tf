@@ -25,7 +25,7 @@ variable "db_subnet_group_name" {
   
 }
 
-variable "dbpassword" {
+variable "dbpass" {
   
 }
 

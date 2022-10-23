@@ -10,16 +10,16 @@ variable "access_ip" {
 #----database----
 
 variable "dbname" {
-  type = string
+  type      = string
   sensitive = true
 }
 
 variable "dbuser" {
-  type = string
+  type      = string
   sensitive = true
 }
 
-variable "dbpassword" {
+variable "dbpass" {
   type      = string
   sensitive = true
 }
