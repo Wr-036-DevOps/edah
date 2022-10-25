@@ -44,3 +44,11 @@ variable "dbname" {
 variable "dbpass" {
   
 }
+
+variable "lb_target_group_arn" {
+  
+}
+
+variable "tg_port" {
+  
+}

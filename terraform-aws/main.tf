@@ -22,7 +22,7 @@ module "database" {
   db_instance_class      = "db.t2.micro"
   dbname                 = var.dbname
   dbuser                 = var.dbuser
-  dbpass             = var.dbpass
+  dbpass                 = var.dbpass
   db_identifier          = "mtc-db"
   skip_final_snapshot    = true
   db_subnet_group_name   = module.networking.db_subnet_group_name[0]
@@ -35,7 +35,7 @@ module "loadbalancing" {
   public_sg              = module.networking.public_sg
   public_subnets         = module.networking.public_subnets
   vpc_id                 = module.networking.vpc_id
-  tg_port                = 80
+  tg_port                = 8000
   tg_protocol            = "HTTP"
   lb_healthy_threshold   = 2
   lb_unhealthy_threshold = 2
@@ -47,17 +47,19 @@ module "loadbalancing" {
 
 
 module "compute" {
-  source          = "./compute"
-  instance_count  = 1
-  instance_type   = "t3.micro"
-  vol_size        = 10
-  public_sg       = module.networking.public_sg
-  public_subnets  = module.networking.public_subnets
-  key_name        = "mtckey"
-  public_key_path = "~/.ssh/mtckey.pub"
-  user_data_path  = "${path.root}/userdata.tpl"
-  dbname          = var.dbname
-  dbuser          = var.dbuser
-  dbpass         = var.dbpass
-  db_endpoint     = module.database.db_endpoint
+  source              = "./compute"
+  instance_count      = 1
+  instance_type       = "t3.micro"
+  vol_size            = 10
+  public_sg           = module.networking.public_sg
+  public_subnets      = module.networking.public_subnets
+  key_name            = "mtckey"
+  public_key_path     = "~/.ssh/mtckey.pub"
+  user_data_path      = "${path.root}/userdata.tpl"
+  dbname              = var.dbname
+  dbuser              = var.dbuser
+  dbpass              = var.dbpass
+  db_endpoint         = module.database.db_endpoint
+  lb_target_group_arn = module.loadbalancing.lb_target_group_arn
+  tg_port = 8000
 }

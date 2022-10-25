@@ -50,3 +50,20 @@ root_block_device{
     volume_size = var.vol_size
 }
 }
+/* provisioner "remote-exec" {
+   connection {
+    type = "ssh"
+    user = "ubuntu"
+    host = self.public_ip
+    private_key = file("/home/ubuntu/.ssh/mtckey")
+   }
+} */
+#provisioner "local-exec" {
+  #command = templatefile("${path.cwd}/script.tpl")
+#}
+resource "aws_lb_target_group_attachment" "mtc_tg_attach" {
+  count = var.instance_count
+  target_group_arn = var.lb_target_group_arn
+  target_id = aws_instance.mtc_node[count.index].id
+  port = var.tg_port
+}

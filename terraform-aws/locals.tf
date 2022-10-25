@@ -21,15 +21,15 @@ locals {
           cidr_blocks = ["0.0.0.0/0"]
         }
         custom_tcp = {
-          from = 5432
-          to = 5432
-          protocol = "tcp"
+          from        = 5432
+          to          = 5432
+          protocol    = "tcp"
           cidr_blocks = ["0.0.0.0/0"]
         }
         custom_tcp = {
-          from = 8000
-          to = 8000
-          protocol = "tcp"
+          from        = 8000
+          to          = 8000
+          protocol    = "tcp"
           cidr_blocks = [local.vpc_cidr]
         }
       }
