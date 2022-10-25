@@ -1,0 +1,14 @@
+[Unit]
+ Description=start a chat service
+ Requires=chat.service
+ After=Network.target
+[Service]
+ Type=forking
+ WorkingDirectory=/home/ubuntu/edah
+ User=ubuntu
+ Restart=always
+ RestartSec=1
+ SuccessExitStatus=143
+ ExecStart=/home/ubuntu/venv/bin/gunicorn -b localhost:5000 app:app
+[Install]
+ WantedBy=multi-user.target
